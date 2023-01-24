@@ -5,4 +5,4 @@ Da 1: Familiarización con el uso de la terminal linux/MAC,consideraciones gener
 
 Día 2: Importancia en el aprendizaje y verificación de parámetros/funciones en programas de ensamblajes,limpieza de adaptadores,indexación de genomas de referencia, Alineamiento contra genoma de referencia (obtención de archivos SAM),filtro de calidad y obtención de archivos BAM.
 
-Día 3: Ediciones generales de archivos BAM. Marcaje/remoción de reads duplicados, obtención de indice y realineamientos locales.
+Día 3: Ediciones generales de archivos BAM. Marcaje/remoción de reads duplicados, obtención de índices BAM y realineamientos locales.
