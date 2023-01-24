@@ -1,0 +1,37 @@
+#Verificación de calidad FASTQC
+
+conda activate fastqc
+
+file="1g 2g 3g"
+
+for sample in $file
+do
+fastqc -o ruta/ --noextract -t 2 -f fastq ruta/${sample}*.fq
+done
+
+#Verificación de calidad multiqc
+
+conda activate multiqc
+multiqc ./
+
+#Remoción de adaptadores
+
+java -jar trimmomatic-0.39.jar PE -threads 10 -phred33 10ADI_S107_R1_001.fastq.gz 10ADI_S107_R2_001.fastq.gz -baseout 10ADI_trimmed.fq ILLUMINACLIP:TruSeq2OVR-PE.fa:2:30:10 LEADING:3 SLIDINGWINDOW:4:15 MINLEN:25
+
+#Alineamiento
+
+conda activate bwa
+
+bwa index -p ruta/Eminor_JU_ref   ruta/G16_Eudyptulaminor.fa_reconstructed.fa
+bwa mem -t 40 -M -R '@RG\tID:10ADI\tLB:10ADI\tPL:ILLUMINA\tPU:A00887\tSM:10ADI' ruta/Enovo_ref 10ADI_trimmed_1P.fq 10ADI_trimmed_2P.fq > 10ADI_Enovo.sam 
+
+#Convertir a archivo binario BAM
+source activate samtools
+
+samtools view -q 10 -f 0x2 -bSh -@ 20 ruta/10ADI_Enovo.sam > ruta/10ADI_Enovo.bam
+
+
+#Ordenar BAM por coordenadas genómicas
+source activate samtools
+
+samtools sort -o ruta/10ADI_sorted_Enovo.bam -@ 40 ruta/10ADI_Enovo.bam
